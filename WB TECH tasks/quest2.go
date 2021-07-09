@@ -2,27 +2,32 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 )
 
-func Number(s string) int {
-	runes := []rune(s)
-	map1:=make(map[rune]bool)
-	for _,run:=range runes{
-		map1[run]=true
-	}
-	return len(map1)
-}
-
 func main(){
+	mu:=sync.RWMutex{}
 	wg:=&sync.WaitGroup{}
-	mas:=[...] string{"abcdefghijklmnopqrstuvwxyz","abcdefghijklmnopqrstuvwxy","vccc"}
-for i,v:= range mas{
-	wg.Add(1)
-	go func(i int,v string){
-		defer wg.Done()
-		num:=Number(v)
-	fmt.Printf("Количество уникальных символов у строки на позиции %d: %d\n",i,num)
-}(i,v)}
-wg.Wait()
+	map1:=make(map[rune]int)
+	str:="AAABBCCCDDEEE"
+	runes := []rune(str)
+	for _,v:=range runes{
+		wg.Add(1)
+		go func(v rune){
+			defer wg.Done()
+			mu.Lock() // Блокировка
+			map1[v]++
+			mu.Unlock() // Отключение блокировки
+		}(v)
+	}
+	wg.Wait()
+	var ourStr string
+	sb:=new(strings.Builder)
+	for ii,vv:= range map1 {
+		ourStr=fmt.Sprintf("%d%s",vv,string(ii))
+		sb.WriteString(ourStr)
+	}
+
+fmt.Println(sb.String())
 }
