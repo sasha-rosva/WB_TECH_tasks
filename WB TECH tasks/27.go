@@ -5,8 +5,8 @@ import "fmt"
 func Reverse(s string) string {
 	r:=[]rune(" ")
 	u:=r[0]
-	run:=[]rune("")
-	run2:=[]rune("")
+	var run []rune
+	var run2 []rune
 	runes := []rune(s)
 	j2:=len(runes)
 	for j:=len(runes)-1;j>0;j--{
