@@ -3,31 +3,25 @@ package main
 import (
 	"fmt"
 	"strings"
-	"sync"
 )
 
 func main(){
-	mu:=sync.RWMutex{}
-	wg:=&sync.WaitGroup{}
 	map1:=make(map[rune]int)
+	var ourStr string
+	var d rune
+	sb:=new(strings.Builder)
 	str:="AAABBCCCDDEEE"
 	runes := []rune(str)
 	for _,v:=range runes{
-		wg.Add(1)
-		go func(v rune){
-			defer wg.Done()
-			mu.Lock() // Блокировка
+		func(v rune){
+			if v!=d && map1[d]!=0{
+				ourStr=fmt.Sprintf("%d%s",map1[d],string(d))
+				sb.WriteString(ourStr)
+			}
 			map1[v]++
-			mu.Unlock() // Отключение блокировки
+			d=v
 		}(v)
 	}
-	wg.Wait()
-	var ourStr string
-	sb:=new(strings.Builder)
-	for ii,vv:= range map1 {
-		ourStr=fmt.Sprintf("%d%s",vv,string(ii))
-		sb.WriteString(ourStr)
-	}
-
-fmt.Println(sb.String())
+	sb.WriteString(fmt.Sprintf("%d%s",map1[runes[len(runes)-1]],string(d)))
+	fmt.Println(sb.String())
 }
