@@ -31,8 +31,9 @@ func MySleep(i int){
 	<-ch1
 }
 func main(){
-	sec:=12
+	sec:=5
 	//fmt.Println(time.Now().Second())
+	fmt.Printf("будем спать %v секунд!\n",sec)
 	MySleep(sec)
 	fmt.Println("Кол-во секунд, при которых программа была в спячке:",sec)
 	//fmt.Println(time.Now().Second())
