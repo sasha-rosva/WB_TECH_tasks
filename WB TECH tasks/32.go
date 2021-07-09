@@ -32,9 +32,7 @@ func MySleep(i int){
 }
 func main(){
 	sec:=5
-	//fmt.Println(time.Now().Second())
 	fmt.Printf("будем спать %v секунд!\n",sec)
 	MySleep(sec)
 	fmt.Println("Кол-во секунд, при которых программа была в спячке:",sec)
-	//fmt.Println(time.Now().Second())
 }
