@@ -12,7 +12,7 @@ func Print(wg *sync.WaitGroup,i int,cancel chan bool){
 	defer wg.Done()
 	for{select {
 	case <-cancel:
-		fmt.Println("Горутина закрылась!")
+		fmt.Println("Горутина ",i, " закрылась!")
 		return
 	default:
 		fmt.Println(i)
