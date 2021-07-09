@@ -3,27 +3,27 @@ package main
 import (
 	"fmt"
 	"strings"
+	"sync"
 )
 
-func Join( words ...string) (string,string){
-	sb:=new(strings.Builder)
-	for _,v:= range words{
-		sb.WriteString(v)
-	}
-	a1:=sb.String()
-	sb.Reset()
-	for i,v:= range words{
-		if i%2==0{
-		sb.WriteString(v)
-	}}
-
-	return a1,sb.String()
-}
-
 func main(){
-w1:="London"
-w2:=" capital"
-q1,q2:=Join(w1," is"," a",w2," of the Great Britain!")
-fmt.Println(q1)
-fmt.Println(q2)
+	mu:=sync.RWMutex{}
+	map1:=make(map[rune]int)
+	str:="AAABBCCCDDEEE"
+	runes := []rune(str)
+	for _,v:=range runes{
+		go func(v rune){
+			mu.Lock() // Блокировка
+			map1[v]++
+			mu.Unlock() // Отключение блокировки
+		}(v)
+	}
+	var ourStr string
+	sb:=new(strings.Builder)
+	for ii,vv:= range map1 {
+		ourStr=fmt.Sprintf("%d%s",vv,string(ii))
+		sb.WriteString(ourStr)
+	}
+
+fmt.Println(sb.String())
 }
